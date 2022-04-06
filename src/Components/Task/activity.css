@@ -1,0 +1,33 @@
+.activity {
+  display: flex;
+  align-items: center;
+  border-top: 1px solid #e0e0e0;
+  padding: 1em;
+  justify-content: space-between;
+}
+
+.activity__taskname {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  color: #4c4c4c;
+  font-size: 0.75em;
+}
+
+.activity__taskname p {
+  margin-bottom: 4px;
+}
+
+.activity_projectname p {
+  font-size: 0.875em;
+}
+
+.activity_right span {
+  /* padding: 9px 12px 5px 12px;s */
+  cursor: pointer;
+  /* border-radius: 50%; */
+}
+
+/* .activity_right span:hover {
+  background-color: gray;
+} */
