@@ -1,11 +1,7 @@
 import React from "react";
 import "./activity.css";
 
-const Task = ({ activity, userId, onDelete }) => {
-  const handleDelete = (id) => {
-    onDelete(id);
-  };
-
+const Task = ({ activity, userId }) => {
   return (
     <div className="activity">
       <div className="activity__left">
@@ -31,8 +27,8 @@ const Task = ({ activity, userId, onDelete }) => {
         </div>
       </div>
       <div className="activity_right">
-        {activity.userId == userId && (
-          <span onClick={() => handleDelete(activity.id)}>
+        {activity.userId === userId && (
+          <span data-id={activity.id} className="delete-button">
             <svg
               width="16"
               height="18"

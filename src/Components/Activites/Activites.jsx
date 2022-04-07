@@ -5,14 +5,14 @@ import "./activites.css";
 import axios from "../../axios/axios";
 import activityReducer from "./activityReducer";
 import { useChannel, useEvent } from "@harelpls/use-pusher";
-
-import Task from "../Task";
+import Activity from "../Activity";
+import Loader from "../Loader";
 
 const Activites = () => {
   const [projectName, setProjectName] = useState("");
   const [taskName, setTaskName] = useState("");
   const [isBillable, setIsBillable] = useState(false);
-  const [userId, setUserId] = useState(1);
+  const [userId] = useState(1);
   const [activities, dispatch] = useReducer(activityReducer, []);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -31,22 +31,17 @@ const Activites = () => {
     })();
   }, []);
 
-  useEffect(() => {
-    console.log(activities);
-  });
-
   const handleActivityDelete = (id) => {
     (async () => {
       try {
         setIsLoading(true);
-
-        let res = await axios.delete(`/${id}`);
+        await axios.delete(`/${id}`);
         console.log(id);
         dispatch({ type: "DELETE_ACTIVITY", payload: id });
         setIsLoading(false);
       } catch (err) {
         console.log(err);
-        if (err.response.status == 404) {
+        if (err.response.status === 404) {
           dispatch({ type: "DELETE_ACTIVITY", payload: id });
         }
         setIsLoading(false);
@@ -54,7 +49,16 @@ const Activites = () => {
     })();
   };
 
-  const handleAddActivity = () => {
+  const handleDelete = (e) => {
+    let delBtn = e.target.closest(".delete-button");
+
+    if (delBtn) {
+      handleActivityDelete(delBtn.dataset.id);
+    }
+  };
+
+  const handleAddActivity = (e) => {
+    e.preventDefault();
     (async () => {
       try {
         setIsLoading(true);
@@ -89,7 +93,11 @@ const Activites = () => {
             <h3>Activites</h3>
           </div>
           <div className="activites_input">
-            <form>
+            <form
+              onSubmit={handleAddActivity}
+              id="addActivityForm"
+              autoComplete="off"
+            >
               <InputField
                 text={projectName}
                 setText={setProjectName}
@@ -116,13 +124,12 @@ const Activites = () => {
               </div>
             </form>
           </div>
-          {/* <div className="activites__list-buttons-container"> */}
           <h4>Team Tasks</h4>
         </div>
         <div className="activites__list">
-          <div className="list">
+          <div className="list" onClick={handleDelete}>
             {activities.map((activity) => (
-              <Task
+              <Activity
                 key={activity.id}
                 activity={activity}
                 userId={userId}
@@ -133,25 +140,19 @@ const Activites = () => {
         </div>
         <div className="acitvity__button-container">
           <button className="activity__button">Cancel</button>
-          <button
+          <input
+            type="submit"
+            form="addActivityForm"
+            value="Add Activity"
             className="activity__button"
             disabled={
               projectName.trim().length > 0 && taskName.trim().length > 0
                 ? false
                 : true
             }
-            onClick={handleAddActivity}
-          >
-            Add activity
-          </button>
+          />
         </div>
-        {/* </div> */}
-        {isLoading && (
-          <div className="loading">
-            <div class="loader"></div>
-            <p>Loading...</p>
-          </div>
-        )}
+        {isLoading && <Loader />}
       </div>
     </>
   );
