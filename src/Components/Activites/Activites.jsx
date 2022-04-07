@@ -25,7 +25,6 @@ const Activites = () => {
     (async () => {
       setIsLoading(true);
       const res = await axios.get("/");
-      console.log(res.data);
       dispatch({ type: "ADD_ALL_ACTIVITES", payload: res.data });
       setIsLoading(false);
     })();
@@ -36,11 +35,9 @@ const Activites = () => {
       try {
         setIsLoading(true);
         await axios.delete(`/${id}`);
-        console.log(id);
         dispatch({ type: "DELETE_ACTIVITY", payload: id });
         setIsLoading(false);
       } catch (err) {
-        console.log(err);
         if (err.response.status === 404) {
           dispatch({ type: "DELETE_ACTIVITY", payload: id });
         }
@@ -68,7 +65,6 @@ const Activites = () => {
           isBillable,
           userId,
         });
-        console.log(res);
         dispatch({
           type: "ADD_ACTIVITY",
           payload: { ...res.data, id: Date.now() },
@@ -79,7 +75,6 @@ const Activites = () => {
         setTaskName("");
         setIsBillable(false);
       } catch (error) {
-        console.log(error);
         setIsLoading(false);
       }
     })();

@@ -8,7 +8,9 @@ const activityReducer = (activities, action) => {
     case "ADD_ACTIVITY":
       return [action.payload, ...activities];
     case "DELETE_ACTIVITY":
-      return activities.filter((activity) => activity.id != action.payload);
+      return activities.filter(
+        (activity) => activity.id !== Number(action.payload)
+      );
     default:
       return activities;
   }
