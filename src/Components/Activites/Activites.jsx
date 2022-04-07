@@ -16,9 +16,13 @@ const Activites = () => {
   const [activities, dispatch] = useReducer(activityReducer, []);
   const [isLoading, setIsLoading] = useState(false);
 
-  const channel = useChannel("my-channel");
-  useEvent(channel, "my-event", (activity) => {
-    dispatch({ type: "ADD_ACTIVITY", payload: activity });
+  const channel = useChannel("sahil-channel");
+  useEvent(channel, "sahil-event", (activity) => {
+    if (activities.find((e) => e.id === Number(activity.id))) {
+      alert("Task already exists");
+    } else {
+      dispatch({ type: "ADD_ACTIVITY", payload: activity });
+    }
   });
 
   useEffect(() => {
@@ -87,6 +91,7 @@ const Activites = () => {
           <div className="activites__header">
             <h3>Activites</h3>
           </div>
+
           <div className="activites_input">
             <form
               onSubmit={handleAddActivity}
@@ -124,12 +129,7 @@ const Activites = () => {
         <div className="activites__list">
           <div className="list" onClick={handleDelete}>
             {activities.map((activity) => (
-              <Activity
-                key={activity.id}
-                activity={activity}
-                userId={userId}
-                onDelete={handleActivityDelete}
-              />
+              <Activity key={activity.id} activity={activity} userId={userId} />
             ))}
           </div>
         </div>
